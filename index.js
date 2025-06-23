@@ -14,6 +14,9 @@ document.addEventListener('click', function (e) {
     else if (e.target.id === 'retweet') {
         handleClickRetweet(e)
     }
+    else if (e.target.id === 'reply-btn') {
+        addComment(e)
+    }
 })
 
 // handle click on retweet icon
@@ -68,6 +71,51 @@ function newTweet() {
     }
 }
 
+// add comment on a tweet
+function addComment(e) {
+    const targetTweetObj = getTweetById(e.target.dataset.newReply)
+    const replyInput = document.getElementById(`reply-input-${targetTweetObj.uuid}`)
+    if (replyInput.value) {
+        targetTweetObj.replies.push({
+            handle: `@mohamedsamir`,
+            profilePic: `images/scrimbalogo.png`,
+            tweetText: replyInput.value,
+        })
+        document.getElementById(`replies-${targetTweetObj.uuid}`).innerHTML = getRepliesHtml(targetTweetObj)
+        replyInput.value = ''
+    }
+    // increament the replies
+    document.getElementById(`replies-counter-${targetTweetObj.uuid}`).innerText = targetTweetObj.replies.length
+
+}
+
+function getRepliesHtml(tweet) {
+    let repliesHtml = ``
+    if (tweet.replies) {
+        tweet.replies.forEach(function (reply) {
+            repliesHtml += `
+            <div class="tweet-reply">
+                <div class="tweet-inner">
+                    <img src="${reply.profilePic}" class="profile-pic">
+                    <div class="reply-info">
+                        <p class="handel">${reply.handle}</p>
+                        <p class="tweet-text">${reply.tweetText}</p>
+                    </div>
+                </div>
+            </div>`
+        })
+    }
+    repliesHtml += `
+    <div class="add-reply">
+        <div class="tweet-inner">
+            <img src="images/scrimbalogo.png" class="profile-pic">
+            <textarea class="reply-input" id="reply-input-${tweet.uuid}" placeholder="leave a comment"></textarea>
+        </div>
+        <button class="reply-btn" id="reply-btn" data-new-reply="${tweet.uuid}">Add Comment</button>
+    </div>`
+    return repliesHtml
+}
+
 // get feet html
 function getFeedHtml() {
     let feedHtml = ``
@@ -78,21 +126,7 @@ function getFeedHtml() {
         const retweetedClass = tweet.isRetweeted ? 'retweeted' : ''
 
         // get the replies of the tweet is existed
-        let repliesHtml = ``
-        if (tweet.replies) {
-            tweet.replies.forEach(function (reply) {
-                repliesHtml += `
-                <div class="tweet-reply">
-                    <div class="tweet-inner">
-                        <img src="${reply.profilePic}" class="profile-pic">
-                        <div class="reply-info">
-                            <p class="handel">${reply.handle}</p>
-                            <p class="tweet-text">${reply.tweetText}</p>
-                        </div>
-                    </div>
-                </div>`
-            })
-        }
+        let repliesHtml = getRepliesHtml(tweet)
 
         feedHtml += `
             <div class="tweet" id="tweet">
@@ -104,7 +138,7 @@ function getFeedHtml() {
                         <div class="tweet-details">
                             <span class="tweet-detail">
                                 <i class="fa-regular fa-comment-dots" id="reply" data-reply="${tweet.uuid}"></i>
-                                ${tweet.replies.length}
+                                <span id="replies-counter-${tweet.uuid}">${tweet.replies.length}</span>
                             </span>
                             <span class="tweet-detail">
                                 <i class="fa-solid fa-heart ${heartLikedClass}" id="heart" data-heart="${tweet.uuid}"></i>
@@ -117,7 +151,6 @@ function getFeedHtml() {
                         </div>
                         <div class="replies hidden" id="replies-${tweet.uuid}">
                             ${repliesHtml}
-                        </div>
                     </div>
                 </div>
             </div>`

@@ -43,7 +43,8 @@ main {
     font-size: 1.25rem;
 }
 
-.tweet-btn {
+.tweet-btn,
+.reply-btn {
     border: none;
     background: #1da1f2;
     color: #fff;
@@ -107,4 +108,16 @@ i {
 
 .fa-comment-dots {
     color: #000;
+}
+
+/* add comment */
+.reply-input {
+    height: 50px;
+    resize: none;
+    border-color: #7d7d7d;
+    border-radius: 5px;
+}
+
+.reply-btn {
+    font-weight: 500;
 }
