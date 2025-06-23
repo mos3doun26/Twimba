@@ -21,7 +21,8 @@ function handleClickRetweet(e) {
     const targetTweetObj = getTweetById(e.target.dataset.retweet)
     targetTweetObj.isRetweeted ? targetTweetObj.retweets-- : targetTweetObj.retweets++
     targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted
-    render()
+    e.target.parentElement.querySelector('span').innerText = targetTweetObj.retweets
+    e.target.classList.toggle('retweeted')
 }
 
 // handle click on heart icon
@@ -29,7 +30,8 @@ function handleClickHeart(e) {
     const targetTweetObj = getTweetById(e.target.dataset.heart)
     targetTweetObj.isLiked ? targetTweetObj.likes-- : targetTweetObj.likes++
     targetTweetObj.isLiked = !targetTweetObj.isLiked
-    render()
+    e.target.parentElement.querySelector('span').innerText = targetTweetObj.likes
+    e.target.classList.toggle('liked')
 }
 
 //handle click on reply icon
@@ -106,11 +108,11 @@ function getFeedHtml() {
                             </span>
                             <span class="tweet-detail">
                                 <i class="fa-solid fa-heart ${heartLikedClass}" id="heart" data-heart="${tweet.uuid}"></i>
-                                ${tweet.likes}
+                                <span>${tweet.likes}</span>
                             </span>
                             <span class="tweet-detail">
                                 <i class="fa-solid fa-retweet ${retweetedClass}" id="retweet" data-retweet="${tweet.uuid}"></i>
-                                ${tweet.retweets}
+                                <span>${tweet.retweets}</span>
                             </span>
                         </div>
                         <div class="replies hidden" id="replies-${tweet.uuid}">
