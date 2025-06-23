@@ -41,6 +41,7 @@ main {
     width: 100%;
     border: none;
     font-size: 1.25rem;
+    padding: 10px;
 }
 
 .tweet-btn,
@@ -116,6 +117,7 @@ i {
     resize: none;
     border-color: #7d7d7d;
     border-radius: 5px;
+    padding: 10px;
 }
 
 .reply-btn {
