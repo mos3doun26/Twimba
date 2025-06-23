@@ -26,6 +26,7 @@ function handleClickRetweet(e) {
     targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted
     e.target.parentElement.querySelector('span').innerText = targetTweetObj.retweets
     e.target.classList.toggle('retweeted')
+    localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
 }
 
 // handle click on heart icon
@@ -35,6 +36,7 @@ function handleClickHeart(e) {
     targetTweetObj.isLiked = !targetTweetObj.isLiked
     e.target.parentElement.querySelector('span').innerText = targetTweetObj.likes
     e.target.classList.toggle('liked')
+    localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
 }
 
 //handle click on reply icon
@@ -45,7 +47,7 @@ function handleClickReply(e) {
 
 // get the tweet by it's uuid
 function getTweetById(tweetId) {
-    return tweetsData.filter(function (tweet) {
+    return tweets.filter(function (tweet) {
         return tweet.uuid === tweetId
     })[0]
 }
@@ -65,8 +67,9 @@ function newTweet() {
             isRetweeted: false,
             uuid: uuidv4(),
         }
-        tweetsData.unshift(tweet)
+        tweets.unshift(tweet)
         tweetInput.value = ''
+        localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
         render()
     }
 }
@@ -83,6 +86,7 @@ function addComment(e) {
         })
         document.getElementById(`replies-${targetTweetObj.uuid}`).innerHTML = getRepliesHtml(targetTweetObj)
         replyInput.value = ''
+        localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
     }
     // increament the replies
     document.getElementById(`replies-counter-${targetTweetObj.uuid}`).innerText = targetTweetObj.replies.length
@@ -120,7 +124,7 @@ function getRepliesHtml(tweet) {
 function getFeedHtml() {
     let feedHtml = ``
 
-    tweetsData.forEach(function (tweet) {
+    tweets.forEach(function (tweet) {
         // get details classes
         const heartLikedClass = tweet.isLiked ? 'liked' : ''
         const retweetedClass = tweet.isRetweeted ? 'retweeted' : ''
@@ -158,8 +162,14 @@ function getFeedHtml() {
     return feedHtml
 }
 
+const tweetsInLocalStorage = JSON.parse(localStorage.getItem('tweets'));
+const tweets = tweetsInLocalStorage ? tweetsInLocalStorage : tweetsData
+if (tweetsInLocalStorage === null) {
+    localStorage.setItem('tweets', JSON.stringify(tweets))
+}
+
 function render() {
     document.getElementById('feed').innerHTML = getFeedHtml()
 }
 
-render()
+document.addEventListener('DOMContentLoaded', render)
