@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'https://cdn.skypack.dev/uuid';
 
 
 document.getElementById('tweet-btn').addEventListener('click', newTweet)
+document.getElementById('user-data-btn').addEventListener('click', handleClosingModal)
+document.getElementById('user-img').addEventListener('change', saveUploadImg)
 
 document.addEventListener('click', function (e) {
     if (e.target.id === 'reply') {
@@ -26,7 +28,7 @@ function handleClickRetweet(e) {
     targetTweetObj.isRetweeted = !targetTweetObj.isRetweeted
     e.target.parentElement.querySelector('span').innerText = targetTweetObj.retweets
     e.target.classList.toggle('retweeted')
-    localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
+    updataLocalStorage()
 }
 
 // handle click on heart icon
@@ -36,7 +38,7 @@ function handleClickHeart(e) {
     targetTweetObj.isLiked = !targetTweetObj.isLiked
     e.target.parentElement.querySelector('span').innerText = targetTweetObj.likes
     e.target.classList.toggle('liked')
-    localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
+    updataLocalStorage()
 }
 
 //handle click on reply icon
@@ -55,10 +57,12 @@ function getTweetById(tweetId) {
 // adding new tweet
 function newTweet() {
     const tweetInput = document.getElementById('tweet-input')
+    const handle = localStorage.getItem('username') ? `@${localStorage.getItem('username')}` : '@Scrimbauser'
+    const profilePic = localStorage.getItem('user-img') ? JSON.parse(localStorage.getItem('user-img')).dataUrl : 'images/scrimbalogo.png'
     if (tweetInput.value) {
         const tweet = {
-            handle: `@Mohamedsamir`,
-            profilePic: `images/scrimbalogo.png`,
+            handle: handle,
+            profilePic: profilePic,
             likes: 0,
             retweets: 0,
             tweetText: tweetInput.value,
@@ -69,7 +73,7 @@ function newTweet() {
         }
         tweets.unshift(tweet)
         tweetInput.value = ''
-        localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
+        updataLocalStorage()
         render()
     }
 }
@@ -78,15 +82,17 @@ function newTweet() {
 function addComment(e) {
     const targetTweetObj = getTweetById(e.target.dataset.newReply)
     const replyInput = document.getElementById(`reply-input-${targetTweetObj.uuid}`)
+    const handle = localStorage.getItem('username') ? `@${localStorage.getItem('username')}` : '@Scrimbauser'
+    const profilePic = localStorage.getItem('user-img') ? JSON.parse(localStorage.getItem('user-img')).dataUrl : 'images/scrimbalogo.png'
     if (replyInput.value) {
         targetTweetObj.replies.push({
-            handle: `@mohamedsamir`,
-            profilePic: `images/scrimbalogo.png`,
+            handle: handle,
+            profilePic: profilePic,
             tweetText: replyInput.value,
         })
         document.getElementById(`replies-${targetTweetObj.uuid}`).innerHTML = getRepliesHtml(targetTweetObj)
         replyInput.value = ''
-        localStorage.setItem('tweets', JSON.stringify(tweets)) // Add this line
+        updataLocalStorage()
     }
     // increament the replies
     document.getElementById(`replies-counter-${targetTweetObj.uuid}`).innerText = targetTweetObj.replies.length
@@ -94,6 +100,7 @@ function addComment(e) {
 }
 
 function getRepliesHtml(tweet) {
+    const profilePic = localStorage.getItem('user-img') ? JSON.parse(localStorage.getItem('user-img')).dataUrl : 'images/scrimbalogo.png'
     let repliesHtml = ``
     if (tweet.replies) {
         tweet.replies.forEach(function (reply) {
@@ -112,7 +119,7 @@ function getRepliesHtml(tweet) {
     repliesHtml += `
     <div class="add-reply">
         <div class="tweet-inner">
-            <img src="images/scrimbalogo.png" class="profile-pic">
+            <img src="${profilePic}" class="profile-pic">
             <textarea class="reply-input" id="reply-input-${tweet.uuid}" placeholder="leave a comment"></textarea>
         </div>
         <button class="reply-btn" id="reply-btn" data-new-reply="${tweet.uuid}">Add Comment</button>
@@ -168,8 +175,53 @@ if (tweetsInLocalStorage === null) {
     localStorage.setItem('tweets', JSON.stringify(tweets))
 }
 
+function updataLocalStorage() {
+    localStorage.setItem('tweets', JSON.stringify(tweets))
+}
+
 function render() {
     document.getElementById('feed').innerHTML = getFeedHtml()
+    if (localStorage.getItem('username') === null) {
+        document.getElementById('profile-pic').src = './images/scrimbalogo.png'
+    } else {
+        document.getElementById('profile-pic').src = JSON.parse(localStorage.getItem('user-img')).dataUrl
+    }
 }
 
 document.addEventListener('DOMContentLoaded', render)
+
+// handle click on submit button and close modal 
+function handleClosingModal(e) {
+    e.preventDefault()
+    localStorage.setItem('username', document.getElementById('username').value)
+    if (document.getElementById('username').value && document.getElementById('user-img').value) {
+        document.getElementById('modal').style.display = 'none'
+    }
+    render()
+}
+
+// save uploead image data in local storage
+function saveUploadImg(e) {
+    const imgFile = e.target.files[0]
+    const reader = new FileReader()
+    reader.onload = function (event) {
+        const currentImageData = {
+            name: imgFile.name,
+            type: imgFile.type,
+            dataUrl: event.target.result
+        }
+
+        localStorage.setItem("user-img", JSON.stringify(currentImageData))
+    }
+
+    if (imgFile) {
+        reader.readAsDataURL(imgFile)
+    }
+}
+
+// loading modal after 5 seconds
+if (localStorage.getItem('username') === null) {
+    setTimeout(function () {
+        document.getElementById('modal').style.display = 'flex'
+    }, 5000);
+}

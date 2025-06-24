@@ -123,3 +123,71 @@ i {
 .reply-btn {
     font-weight: 500;
 }
+
+/* modal */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #00000054;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-inner {
+    background: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px
+}
+
+input[type="text"] {
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: #1da1f2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: "Roboto", sans-serif;
+}
+
+.user-data-btn {
+    border: none;
+    background: #1da1f2;
+    color: #fff;
+    font-family: "Roboto", sans-serifs;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    font-weight: 900;
+    font-size: 1rem;
+}
+
+.close-modal-btn {
+    padding: 4px 8px;
+    border-radius: 50%;
+    border: none;
+    margin-left: auto;
+    width: fit-content;
+}
+
+.close-modal-btn:hover {
+    background: red;
+    color: #fff;
+}

@@ -29,12 +29,27 @@
     </header>
     <main>
         <div class="new-tweet">
-            <img src="./images/scrimbalogo.png" class="profile-pic">
+            <img class="profile-pic" id="profile-pic">
             <textarea placeholder="What's happening?" id="tweet-input" class="tweet-input"></textarea>
         </div>
         <button class="tweet-btn" id="tweet-btn">Tweet</button>
         <div class="feed" id="feed"></div>
     </main>
+    <div class="modal" id="modal">
+        <div class="modal-inner">
+            <form>
+
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="E. MohamedSamir" minlength="3"
+                    maxlength="20" required>
+
+                <label for="user-img">Profile pic</label>
+                <input type="file" accept="image/*" name="user-img" id="user-img" required>
+
+                <button id="user-data-btn" class="user-data-btn" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
     <script src="index.js" type="module"></script>
 </body>
 
