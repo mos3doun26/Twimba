@@ -19,6 +19,13 @@ document.addEventListener('click', function (e) {
     else if (e.target.id === 'reply-btn') {
         addComment(e)
     }
+    else if (e.target.id === 'delete-icon') {
+        const targetTweetObjId = getTweetToDeleteId(e)
+        showDeleteModal(targetTweetObjId)
+    }
+    else if (e.target.id === 'delete-tweet-close-btn' | e.target.id === 'delete-tweet-modal') {
+        handleClosingDeleteModal(e)
+    }
 })
 
 // handle click on retweet icon
@@ -78,6 +85,36 @@ function newTweet() {
     }
 }
 
+// delete tweet
+function getTweetToDeleteId(e) {
+    const tweetsLocal = JSON.parse(localStorage.getItem('tweets'))
+    const targetTweetObj = tweetsLocal.filter(function (tweet) {
+        return tweet.uuid === e.target.dataset.delete
+    })[0]
+    return targetTweetObj.uuid
+}
+
+// show modal of deleting tweet for confirmation
+function showDeleteModal(targetTweetObjId) {
+    document.getElementById('delete-tweet-modal').style.display = 'flex'
+    document.getElementById('delete-tweet-btn').addEventListener('click', function () {
+        document.getElementById('delete-tweet-modal').style.display = 'none'
+        deleteTweet(targetTweetObjId)
+
+    })
+}
+
+// confirm deleting tweet
+function deleteTweet(targetTweetObjId) {
+    const tweetsLocal = JSON.parse(localStorage.getItem('tweets'))
+    const newTweetsData = tweetsLocal.filter(function (tweet) {
+        return tweet.uuid !== targetTweetObjId
+    })
+    tweets = newTweetsData
+    localStorage.setItem('tweets', JSON.stringify(newTweetsData))
+    render()
+}
+
 // add comment on a tweet
 function addComment(e) {
     const targetTweetObj = getTweetById(e.target.dataset.newReply)
@@ -135,7 +172,8 @@ function getFeedHtml() {
         // get details classes
         const heartLikedClass = tweet.isLiked ? 'liked' : ''
         const retweetedClass = tweet.isRetweeted ? 'retweeted' : ''
-
+        // get delete icon html
+        const deleteIcon = `@${localStorage.getItem('username')}` === tweet.handle ? `<i class="fa-solid fa-trash delete-icon" id="delete-icon" data-delete="${tweet.uuid}"></i>` : ''
         // get the replies of the tweet is existed
         let repliesHtml = getRepliesHtml(tweet)
 
@@ -143,8 +181,11 @@ function getFeedHtml() {
             <div class="tweet" id="tweet">
                 <div class="tweet-inner">
                     <img src="${tweet.profilePic}" class="profile-pic">
-                    <div>
-                        <p class="handel">${tweet.handle}</p>
+                    <div class="tweet-info">
+                        <div class="handel-delete-icon" id="handel-delete-icon">
+                            <p class="handel" id="handel">${tweet.handle}</p>
+                            ${deleteIcon}
+                        </div>
                         <p class="tweet-text">${tweet.tweetText}</p>
                         <div class="tweet-details">
                             <span class="tweet-detail">
@@ -169,10 +210,16 @@ function getFeedHtml() {
     return feedHtml
 }
 
-const tweetsInLocalStorage = JSON.parse(localStorage.getItem('tweets'));
-const tweets = tweetsInLocalStorage ? tweetsInLocalStorage : tweetsData
-if (tweetsInLocalStorage === null) {
-    localStorage.setItem('tweets', JSON.stringify(tweets))
+let tweets = getLocalTweetsData()
+
+function getLocalTweetsData() {
+    const tweetsInLocalStorage = JSON.parse(localStorage.getItem('tweets'));
+    let tweets = tweetsInLocalStorage ? tweetsInLocalStorage : tweetsData
+    if (tweetsInLocalStorage === null) {
+        localStorage.setItem('tweets', JSON.stringify(tweets))
+    }
+
+    return tweets
 }
 
 function updataLocalStorage() {
@@ -198,6 +245,11 @@ function handleClosingModal(e) {
         document.getElementById('modal').style.display = 'none'
     }
     render()
+}
+
+// hadle close delete tweet modal
+function handleClosingDeleteModal(e) {
+    document.getElementById('delete-tweet-modal').style.display = 'none'
 }
 
 // save uploead image data in local storage

@@ -75,6 +75,25 @@ main {
     border-top: 2px solid #dcdcdc;
 }
 
+.tweet-info {
+    width: 100%;
+}
+
+.handel-delete-icon {
+    display: flex;
+    align-items: center;
+}
+
+.delete-icon {
+    margin-left: auto;
+}
+
+.delete-icon:focus,
+.delete-icon:active,
+.delete-icon:hover {
+    color: #d40e0e;
+}
+
 .handel {
     color: #7d7d7d;
     margin: -5px
@@ -126,7 +145,8 @@ i {
 
 /* modal */
 
-.modal {
+.modal,
+.delete-tweet-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -162,18 +182,19 @@ input[type="file"]::file-selector-button {
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     cursor: pointer;
     font-family: "Roboto", sans-serif;
 }
 
-.user-data-btn {
+.user-data-btn,
+.delete-tweet-btn {
     border: none;
     background: #1da1f2;
     color: #fff;
     font-family: "Roboto", sans-serifs;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
     width: 100%;
     font-weight: 900;
     font-size: 1rem;
@@ -190,4 +211,14 @@ input[type="file"]::file-selector-button {
 .close-modal-btn:hover {
     background: red;
     color: #fff;
+}
+
+/* delete tweet modal  */
+
+.delete-tweet-btn {
+    width: fit-content;
+    margin-left: auto;
+    background: #d40e0e;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
