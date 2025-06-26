@@ -26,6 +26,9 @@ document.addEventListener('click', function (e) {
     else if (e.target.id === 'delete-tweet-close-btn' | e.target.id === 'delete-tweet-modal') {
         handleClosingDeleteModal(e)
     }
+    else if (e.target.id === 'dark-light-toggle-icon') {
+        swithTheme()
+    }
 })
 
 // handle click on retweet icon
@@ -227,6 +230,10 @@ function updataLocalStorage() {
 }
 
 function render() {
+    // save the current theme
+    localStorage.setItem('theme', document.querySelector('html').dataset.theme)
+    renderToggleIcon()
+
     document.getElementById('feed').innerHTML = getFeedHtml()
     if (localStorage.getItem('username') === null) {
         document.getElementById('profile-pic').src = './images/scrimbalogo.png'
@@ -276,4 +283,23 @@ if (localStorage.getItem('username') === null) {
     setTimeout(function () {
         document.getElementById('modal').style.display = 'flex'
     }, 5000);
+}
+
+// get the toggle icon
+function renderToggleIcon() {
+    const theme = localStorage.getItem('theme')
+    if (theme === 'light') {
+        document.getElementById('dark-light-toggle').innerHTML = `<i class="fa-solid fa-moon" id="dark-light-toggle-icon"></i>`
+    } else if (theme === 'dark') {
+        document.getElementById('dark-light-toggle').innerHTML = `<i class="fa-solid fa-sun" id="dark-light-toggle-icon"></i>`
+    }
+}
+
+// swith theme
+function swithTheme() {
+    const currentTheme = localStorage.getItem('theme')
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light'
+    document.querySelector('html').setAttribute('data-theme', newTheme)
+    renderToggleIcon()
+    render()
 }

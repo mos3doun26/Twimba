@@ -3,12 +3,45 @@ body {
     margin: 0;
     padding: 0;
     font-family: "Roboto", sans-serif;
+    color: var(--main-txt-color);
+    background: var(--main-bg-color);
+    --h1-color: #1da1f2;
+    --primary-btn-bg-color: #1da1f2;
+    --secondary-btn-bg-color: #d40e0e;
+    --btn-color: #fff;
+    --delete-icon-hover-color: #d40e0e;
+    --retweeted-color: #32cd32;
+    --liked-color: #ff0000;
+    --handel-txt-color: #7d7d7d;
+}
+
+html[data-theme="light"] {
+    --main-bg-color: #fff;
+    --main-txt-color: #000;
+    --border-color: #dcdcdc;
+    --general-icon-color: #7d7d7d;
+    --comment-icon-color: #000;
+    --modal-bg-color: #00000054;
+    --toggle-bg-color: #e8eaf0;
+    --toggle-txt-color: #3d3f57;
+}
+
+html[data-theme="dark"] {
+    --main-bg-color: #040404;
+    --main-txt-color: #cacccc;
+    --border-color: #757575;
+    --general-icon-color: #cacccc;
+    --comment-icon-color: #cacccc;
+    --modal-bg-color: #ffffff1c;
+    --toggle-bg-color: #101325;
+    --toggle-txt-color: #3b435a;
 }
 
 /* typograph */
 h1 {
-    color: #1da1f2;
+    color: var(--h1-color);
     font-size: 1.75rem;
+    margin: 0;
 }
 
 p {
@@ -21,6 +54,28 @@ header,
 main {
     margin: 0 auto;
     width: 300px;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    padding: 10px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dark-light-toggle {
+    border: none;
+    border-radius: 50%;
+    background: var(--toggle-bg-color);
+    padding: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+}
+
+#dark-light-toggle-icon {
+    color: var(--toggle-txt-color);
 }
 
 .new-tweet,
@@ -42,14 +97,16 @@ main {
     border: none;
     font-size: 1.25rem;
     padding: 10px;
+    background: var(--main-bg-color);
+    color: var(--main-txt-color);
 }
 
 .tweet-btn,
 .reply-btn {
     border: none;
-    background: #1da1f2;
+    background: var(--primary-btn-bg-color);
     color: #fff;
-    font-family: "Roboto", sans-serifs;
+    font-family: "Roboto", sans-serif;
     padding: 10px;
     border-radius: 20px;
     width: 100%;
@@ -58,12 +115,8 @@ main {
     font-size: 1rem;
 }
 
-.feed {
-    border-bottom: 2px solid #dcdcdc;
-}
-
 .tweet {
-    border-top: 2px solid #dcdcdc;
+    border-top: 2px solid var(--border-color);
 }
 
 .tweet-inner {
@@ -72,7 +125,7 @@ main {
 }
 
 .tweet-inner:not(:first-child) {
-    border-top: 2px solid #dcdcdc;
+    border-top: 2px solid var(--border-color);
 }
 
 .tweet-info {
@@ -95,7 +148,7 @@ main {
 }
 
 .handel {
-    color: #7d7d7d;
+    color: var(--handel-txt-color);
     margin: -5px
 }
 
@@ -106,7 +159,7 @@ main {
 }
 
 .tweet-reply {
-    border-top: 1px solid #dcdcdc;
+    border-top: 1px solid var(--border-color);
 }
 
 .hidden {
@@ -114,29 +167,31 @@ main {
 }
 
 .liked {
-    color: red;
+    color: var(--liked-color);
 }
 
 .retweeted {
-    color: #32cd32;
+    color: var(--retweeted-color);
 }
 
 i {
-    color: #7d7d7d;
+    color: var(--general-icon-color);
     cursor: pointer;
 }
 
 .fa-comment-dots {
-    color: #000;
+    color: var(--comment-icon-color);
 }
 
 /* add comment */
 .reply-input {
     height: 50px;
     resize: none;
-    border-color: #7d7d7d;
+    border-color: var(--border-color);
     border-radius: 5px;
     padding: 10px;
+    background: var(--main-bg-color);
+    color: var(--main-txt-color);
 }
 
 .reply-btn {
@@ -150,7 +205,7 @@ i {
     position: fixed;
     top: 0;
     left: 0;
-    background: #00000054;
+    background: var(--modal-bg-color);
     width: 100vw;
     height: 100vh;
     display: none;
@@ -159,11 +214,12 @@ i {
 }
 
 .modal-inner {
-    background: #fff;
+    background: var(--main-bg-color);
     padding: 20px;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--border-color);
 }
 
 form {
@@ -175,10 +231,12 @@ form {
 input[type="text"] {
     padding: 10px 20px;
     border-radius: 10px;
+    background: var(--main-bg-color);
+    color: var(--main-txt-color);
 }
 
 input[type="file"]::file-selector-button {
-    background-color: #1da1f2;
+    background-color: var(--primary-btn-bg-color);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -190,7 +248,7 @@ input[type="file"]::file-selector-button {
 .user-data-btn,
 .delete-tweet-btn {
     border: none;
-    background: #1da1f2;
+    background: var(--primary-btn-bg-color);
     color: #fff;
     font-family: "Roboto", sans-serifs;
     padding: 10px;
@@ -218,7 +276,8 @@ input[type="file"]::file-selector-button {
 .delete-tweet-btn {
     width: fit-content;
     margin-left: auto;
-    background: #d40e0e;
+    background: var(--secondary-btn-bg-color);
+    color: var(--btn-color);
     font-weight: 500;
     font-size: 0.9rem;
 }
